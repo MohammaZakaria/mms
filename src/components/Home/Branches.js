@@ -14,11 +14,6 @@ const Branches = () => {
     }, [])
     const fetchBranches = async () => {
         setMessage('Loading ...')
-
-        // const res = await db.collection("branches").get()
-        // const branchesArray = await res.docs.map(doc => {
-        //     return { id: doc.id, ...doc.data() }
-        // })
         db.collection("branches").onSnapshot((snapshot) => {
             const branchesArray = snapshot.docs.map(doc => {
                 return { id: doc.id, ...doc.data() }

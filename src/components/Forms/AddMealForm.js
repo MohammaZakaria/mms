@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import CustomErrorMessage from './CustomErrorMessage'
 import './../../assets/css/forms.css'
+import isImageURL from 'valid-image-url';
 
-function AddMealForm({ postData, initialValuesOnEdit }) {
-    console.log('initialValuesOnEdit :', initialValuesOnEdit);
+function AddMealForm({ formType, postData, initialValuesOnEdit }) {
 
     const [ingredient, setIngredient] = useState('')
     const [step, setStep] = useState('');
@@ -20,12 +20,16 @@ function AddMealForm({ postData, initialValuesOnEdit }) {
     }
     return (
         <div className="custom-form"> {/* custom class */}
-            <h3 className="form-title">Add a new <span className="bg-dark light-colored">Meal!</span></h3>
+            <h3 className="form-title"> {formType !== "edit" ? 'Add a new' : 'Update'} <span className="bg-dark light-colored">{formType !== "edit" ? 'Meal!' : `${initial.title}`}</span></h3>
             <Formik
                 initialValues={initial}
-                validate={values => {
+                validate={async (values) => {
                     const errors = {};
-                    if (!values.title || !values.mealUrl || !values.chef || !values.priority || !values.mealUrl || values.ingredients.length == 0 || values.steps.length == 0) {
+                    const isImage = values.mealUrl ? await isImageURL(values.mealUrl) : false
+                    if (!isImage) {
+                        errors.mealUrl = "Empty Or invalid image";
+                    }
+                    if (!values.title || !values.mealUrl || !values.chef || !values.priority || !values.mealUrl || values.ingredients.length === 0 || values.steps.length === 0) {
                         if (!values.title) {
                             errors.title = "Required.";
                         }
@@ -35,13 +39,11 @@ function AddMealForm({ postData, initialValuesOnEdit }) {
                         if (!values.priority) {
                             errors.priority = "Required.";
                         }
-                        if (!values.mealUrl) {
-                            errors.mealUrl = "Required.";
-                        }
-                        if (values.ingredients.length == 0) {
+
+                        if (values.ingredients.length === 0) {
                             errors.ingredients = "Required.";
                         }
-                        if (values.steps.length == 0) {
+                        if (values.steps.length === 0) {
                             errors.steps = "Required.";
                         }
                     }
@@ -141,7 +143,7 @@ function AddMealForm({ postData, initialValuesOnEdit }) {
                             </ol>
                         </div>
                         <button className="custom-btn-submit bg-dark" type="submit" disabled={isSubmitting}>
-                            Submit
+                            {formType !== "edit" ? 'Submit' : 'Update'}
                         </button>
                     </Form>
                 )}

@@ -9,19 +9,34 @@ import db from './../../firebaseConfig'
 import ControlNav from './ControlNav';
 import AddMealForm from './../Forms/AddMealForm'
 import VerticallyCenteredModal from './../global/VerticallyCenteredModal'
+import SweetAlert from "react-bootstrap-sweetalert";
+import { useAlert } from 'react-alert'
 
 
 const Board = (props) => {
     const [meals, setMeals] = useState([])
     const [modalShow, setModalShow] = useState(false);
     const [item, setItem] = useState({});
+    const [sweetAlert, setSweetAlert] = useState(false);
+    const [mealId, setMealId] = useState('');
+    const [branchNameState, setBranchNameState] = useState('');
+    const alert = useAlert()
 
-    const docId = props.match.params.id
+    const docId = props.match.params.id; // this is the id of the branch
+
     useEffect(() => {
         fetchItems()
+        fetchBoardsName()
+        window.scrollTo(0, 0);
     }, [])
-    const fetchItems = async () => {
 
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    })
+
+
+    const fetchItems = async () => {
         db.collection("branches").doc(docId).collection('meals')
             .onSnapshot((snapshot) => {
                 const mealsArray = snapshot.docs.map(doc => {
@@ -29,11 +44,13 @@ const Board = (props) => {
                 })
                 setMeals(mealsArray)
             })
-        // const items = await db.collection('branches').doc(docId).collection('meals').get()
-        // const branchesArray = await items.docs.map(doc => {
-        //     return { id: doc.id, ...doc.data() }
-        // })
-        // setMeals(branchesArray)
+    }
+
+    const fetchBoardsName = async () => {
+        const branch = await db.collection("branches").doc(docId).get()
+        const { branchName } = branch.data()
+        setBranchNameState(branchName)
+        // setMeals(mealsArray)
     }
     const columnsFromBackend = {
         'to-cook': {
@@ -84,7 +101,6 @@ const Board = (props) => {
                 ...removed,
                 status: destination.droppableId
             }
-            console.log('newObj :', newObj);
             await db.collection('branches').doc(docId).collection('meals').doc(removed.id).set(newObj)
 
 
@@ -110,10 +126,25 @@ const Board = (props) => {
         setModalShow(true)
     }
 
+    const handleDeleteButtonClick = async (id) => {
+        if (id) {
+            setMealId(id)
+        } else {
+            setMealId('')
+        }
+        setSweetAlert(!sweetAlert)
+    }
+
+    const handleDeleteFunctionality = async (id) => {
+        setSweetAlert(false)
+        await db.collection('branches').doc(docId).collection("meals").doc(id).delete()
+        alert.success('Congrats you have deleted the meal successfully!')
+    }
+
     return (
         <main className="board">
             <Container className="mt-100px min-h-100">
-                <ControlNav boardId={docId} />
+                <ControlNav branchName={branchNameState} boardId={docId} />
                 <Row>
                     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
                         <DragDropContext
@@ -178,6 +209,12 @@ const Board = (props) => {
 
                                                                                     <div className='flex flex-col'>
                                                                                         <div className="item-image">
+                                                                                            <button className="item-top-button" onClick={e => handleDeleteButtonClick(item.id)}>
+                                                                                                <svg onClick={e => handleDeleteButtonClick(item.id)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash custom-bi-trash" viewBox="0 0 16 16">
+                                                                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                                                                    <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                                                                </svg>
+                                                                                            </button>
                                                                                             <img src={item.mealUrl} alt={item.title} />
                                                                                         </div>
                                                                                         <div className='item-body'>
@@ -237,17 +274,28 @@ const Board = (props) => {
                         </div>
                     </Col>
                 </Row> */}
-
-
             </Container>
             <VerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 title="Add a new Branch"
             >
-
-                <AddMealForm initialValuesOnEdit={item} />
+                <AddMealForm formType="edit" initialValuesOnEdit={item} />
             </VerticallyCenteredModal>
+            {sweetAlert &&
+                <SweetAlert
+                    danger
+                    showCancel
+                    confirmBtnText="Yes, delete it!"
+                    confirmBtnBsStyle="danger"
+                    title="Are you sure?"
+                    onConfirm={e => handleDeleteFunctionality(mealId)}
+                    onCancel={handleDeleteButtonClick}
+                    focusCancelBtn
+                >
+                    You will not be able to recover this imaginary file!
+                </SweetAlert>
+            }
         </main >
     )
 }

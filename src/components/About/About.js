@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container } from 'react-bootstrap';
 
-const index = () => {
+const About = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
     return (
         <Container className="min-h-100">
             About
@@ -9,4 +12,4 @@ const index = () => {
     )
 }
 
-export default index
+export default About

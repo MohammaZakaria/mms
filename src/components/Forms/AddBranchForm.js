@@ -2,6 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import CustomErrorMessage from './CustomErrorMessage'
 import './../../assets/css/forms.css'
+import isImageURL from 'valid-image-url';
 
 const AddBranchForm = ({ postData }) => (
 
@@ -9,17 +10,18 @@ const AddBranchForm = ({ postData }) => (
         <h3 className="form-title">Add a new <span className="bg-dark light-colored">Branch!</span></h3>
         <Formik
             initialValues={{ branchName: '', branchLocation: '', branchAvatar: '' }}
-            validate={values => {
+            validate={async (values) => {
                 const errors = {};
-                if (!values.branchName || !values.branchLocation || !values.branchAvatar) {
+                const isImage = values.branchAvatar ? await isImageURL(values.branchAvatar) : false;
+                if (!isImage) {
+                    errors.branchAvatar = "Empty Or invalid image";
+                }
+                if (!values.branchName || !values.branchLocation) {
                     if (!values.branchName) {
                         errors.branchName = "Required: Add the branche's name please.";
                     }
                     if (!values.branchLocation) {
                         errors.branchLocation = "Required: Add the branche's location please";
-                    }
-                    if (!values.branchAvatar) {
-                        errors.branchAvatar = "Required: Add the branche's image url please.";
                     }
                 }
                 return errors;

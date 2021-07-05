@@ -1,7 +1,7 @@
-import React from 'react';
-import Home from './components/Home/index'
-import About from './components/About/index'
-import Contact from './components/Contact/index'
+import React, { useEffect } from 'react';
+import Home from './components/Home/Home'
+import About from './components/About/About'
+import Contact from './components/Contact/Contact'
 import './assets/css/index.css'
 import SiteNavBar from './components/global/SiteNavBar';
 import {
@@ -27,9 +27,10 @@ const options = {
   transition: transitions.SCALE
 }
 
-
 function App() {
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <AlertProvider template={AlertTemplate} {...options}>
       <div className="app">
@@ -53,8 +54,5 @@ function App() {
 
 export default App;
 
-// 1. make the style of the board 
-// 2. add item
 // 3. make control the board
-// 4. style the item 
 // 5. control the item

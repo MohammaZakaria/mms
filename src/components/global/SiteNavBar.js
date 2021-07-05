@@ -11,14 +11,19 @@ import VerticallyCenteredModal from './VerticallyCenteredModal'
 import AddBranchForm from '../Forms/AddBranchForm';
 import db from './../../firebaseConfig'
 import { useAlert } from 'react-alert'
+import { useHistory } from "react-router-dom"
 
 const SiteNavBar = () => {
   const [modalShow, setModalShow] = useState(false);
   const alert = useAlert()
+  let history = useHistory()
+
   const handleSubmit = async (values) => {
-    await db.collection('branches').add(values)
+    const added = await db.collection('branches').add(values)
     setModalShow(false)
     alert.success('Congrats you have added a new Branch!')
+    history.push(`/branch/${added.id}`)
+    // dirext to branch page
     // setAlert('user added successfully , you are being redirected to users')
   }
 
