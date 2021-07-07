@@ -29,14 +29,14 @@ const SiteNavBar = () => {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" bg="custom" variant="custom" className="fixed-nav">
+      <Navbar collapseOnSelect expand="lg" bg="custom" variant="custom" className="sticky-nav">
         <Container>
           <Navbar.Brand className="secondary-font customs-logo"><Link to="/">MMS</Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
               {/* <Nav.Link> <Link to="/">Home</Link></Nav.Link> */}
-              <Link className="link-item" to="/about">how wae are?</Link>
+              <Link className="link-item" to="/about">About Us</Link>
               <Link className="link-item" to="/contact">Keep in touch!</Link>
               {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
