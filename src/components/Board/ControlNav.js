@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import VerticallyCenteredModal from './../global/VerticallyCenteredModal'
 import AddMealForm from './../Forms/AddMealForm'
+import AddBranchForm from './../Forms/AddBranchForm'
 import { Row, Col, Button } from 'react-bootstrap';
 import { useAlert } from 'react-alert'
 import db from './../../firebaseConfig'
@@ -12,7 +13,9 @@ import { useHistory } from "react-router-dom"
 
 const ControlNav = ({ boardId, branchName }) => {
     const [modalShow, setModalShow] = useState(false);
+    const [modalWrap, setModalWrap] = useState({ operation: '', formType: '' });
     const [sweetAlert, setSweetAlert] = useState(false);
+    const [branch, setBranch] = useState({});
     const alert = useAlert()
     const history = useHistory()
 
@@ -21,6 +24,7 @@ const ControlNav = ({ boardId, branchName }) => {
         await db.collection('branches').doc(boardId).collection('meals').add(values)
         setModalShow(false)
         alert.success('Congrats you have added a new Meal successfully!')
+        setModalWrap({ operation: '', formType: '' })
     }
 
 
@@ -40,11 +44,21 @@ const ControlNav = ({ boardId, branchName }) => {
         }
     }
 
+
+    const handleModal = async (operation, formType) => {
+        if (formType === 'branch') {
+            const branchData = await db.collection('branches').doc(boardId).get();
+            setBranch(branchData.data())
+        }
+        setModalWrap({ operation: operation, formType: formType })
+        setModalShow(true)
+    }
+
     return (
         <>
             <Row className="nav-bar-control">
                 <Col className="flex align-center">
-                    <Button className="bg-orange btn-custom" onClick={() => setModalShow(true)}>
+                    <Button className="bg-orange btn-custom" onClick={() => handleModal('add', 'meal')}>
                         <div>
                             <div className="flex align-center justify-center">
                                 <FileEarmarkPlus className="add-icon-meal" /><span className="btn-text">Meal</span>
@@ -54,13 +68,13 @@ const ControlNav = ({ boardId, branchName }) => {
                     </Button>
                 </Col>
                 <Col className="text-right">
-                    <Button className="bg-dark btn-custom">
+                    <Button className="bg-dark btn-custom" onClick={() => handleModal('edit', 'branch')}>
                         <div>
                             <div className="flex align-center justify-center">
                                 <PencilSquare /><span className="btn-text">{branchName}</span>
                             </div>
                         </div>
-                    </Button> <Button onClick={e => handleDeleteButtonClick(boardId)} className="bg-dark btn-custom">        <div>
+                    </Button> <Button onClick={e => handleDeleteButtonClick(boardId)} className="bg-dark btn-custom"><div>
                         <div className="flex align-center justify-center">
                             <Trash onClick={e => handleDeleteButtonClick(boardId)} /> <span onClick={e => handleDeleteButtonClick(boardId)} className="btn-text">{branchName}</span>
                         </div>
@@ -72,7 +86,14 @@ const ControlNav = ({ boardId, branchName }) => {
                 onHide={() => setModalShow(false)}
                 title="Add a new Branch"
             >
-                <AddMealForm formType="add" postData={handleSubmit} />
+                {
+                    modalWrap.formType === 'meal' ?
+                        <AddMealForm formType={modalWrap.operation === 'edit' ?
+                            modalWrap.operation : 'add'} postData={handleSubmit} />
+                        : modalWrap.formType === 'branch' ?
+                            <AddBranchForm initialValuesOnEdit={branch} formType={modalWrap.operation === 'edit' ?
+                                modalWrap.operation : 'add'} postData={handleSubmit} /> : null
+                }
             </VerticallyCenteredModal>
             {sweetAlert &&
                 <SweetAlert

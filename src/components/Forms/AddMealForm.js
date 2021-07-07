@@ -5,6 +5,7 @@ import './../../assets/css/forms.css'
 import isImageURL from 'valid-image-url';
 
 function AddMealForm({ formType, postData, initialValuesOnEdit }) {
+    // console.log('formType :', formType);
 
     const [ingredient, setIngredient] = useState('')
     const [step, setStep] = useState('');

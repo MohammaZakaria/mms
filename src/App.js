@@ -54,5 +54,8 @@ function App() {
 
 export default App;
 
-// 3. make control the board
-// 5. control the item
+// 1. Make reusable cards components.
+// 2. make the contact page.
+  // a. cards with [phones, emails, live chat]
+  // b. contact form 
+// 3. solve images sizes and change the titles 

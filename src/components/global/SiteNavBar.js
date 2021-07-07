@@ -65,7 +65,7 @@ const SiteNavBar = () => {
         onHide={() => setModalShow(false)}
         title="Add a new Branch"
       >
-        <AddBranchForm postData={handleSubmit} />
+        <AddBranchForm formType='add' postData={handleSubmit} />
       </VerticallyCenteredModal>
     </>
   )
