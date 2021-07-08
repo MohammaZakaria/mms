@@ -39,7 +39,7 @@
 
 .vision-mission-values > .card {
   display: flex;
-  flex-basis: 25%;
+  flex-basis: 30%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
