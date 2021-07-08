@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Container, Col } from 'react-bootstrap';
 import "../../assets/css/about_us.css";
 import notification from '../../assets/icons/notification.svg';
 import tasks from '../../assets/icons/tasks.svg';
@@ -8,6 +7,28 @@ import { Eye, Bullseye, Gem } from 'react-bootstrap-icons';
 import Services from './../global/Services'
 import Cards from '../global/Cards';
 import './../../assets/css/about_us.css';
+
+const cards = [
+    {
+        image: <Eye />,
+        header: "Vision", // h3!
+        textLines: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur"],
+        rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row" // leave spaces!
+    },
+    {
+        image: <Bullseye />,
+        header: "Mission",
+        textLines: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur"],
+        rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row"
+    },
+    {
+        image: <Gem />,
+        header: "Values",
+        textLines: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur"],
+        rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row"
+    },
+
+]
 
 const About = () => {
     useEffect(() => {
@@ -51,34 +72,8 @@ const About = () => {
                 }
             />
             <CallToAction />
-            <Cards 
-                arrayOfCardObjects={
-                    [
-                        {image: <Eye />,
-                            header: "Vision", // h3!
-                            text: [
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur</p>
-                            ], 
-                            rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row" // leave spaces!
-                        },
-                        {
-                            image: <Bullseye />, 
-                            header: "Mission",
-                            text: [
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur</p>
-                            ],
-                            rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row"
-                        },
-                        {image: <Gem />,
-                            header: "Values",
-                            text: [
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit vitae, ornare et erat. Duis efficitur</p>
-                            ],
-                            rowClasses: "vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row"
-                        },
-                        
-                    ]
-                } 
+            <Cards
+                cardsArray={cards}
             />
         </>
     )

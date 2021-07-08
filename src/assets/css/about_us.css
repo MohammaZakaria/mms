@@ -44,23 +44,32 @@
   justify-content: center;
   align-items: center;
   transition: ease 250ms;
-  padding: 30px;
+  padding: 20px;
   margin: 17px 0;
+  color: var(--dark-color);
+
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .vision-mission-values > .card:hover {
-  background-color: #82a3a1;
+  background-color: var(--hover-color);
   color: #fef9ff;
   transition: ease 250ms;
 }
 
 .card > svg {
   font-size: 80px;
+  margin-bottom: 25px;
+  color: var(--orange-color);
 }
 
 .card > h3 {
   transition: ease 250ms;
+  margin-bottom: 15px;
+}
+
+.card > p {
+  text-align: center;
 }
 
 .card:hover > h3 {
