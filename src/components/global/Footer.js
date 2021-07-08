@@ -11,7 +11,7 @@ function Footer() {
     return (
         <footer className="custom-footer">
             <Container>
-                <Row>
+                <Row className="footer-row">
                     <Col>
                         <div className="flex align-center">
                             <small className="footer-item">
@@ -22,8 +22,8 @@ function Footer() {
                             <Link to={{ pathname: "https://twitter.com/ZakariaMo7ammad?s=09" }} target={"_blank"} > <Twitter className="footer-item custom-icon" /></Link>
                         </div>
                     </Col>
-                    <Col className="text-right">
-                        <div>
+                    <Col className="text-right d-flex align-items-center justify-content-end">
+                        <div className="d-flex align-items-center">
                             <Link to={{ pathname: "https://twitter.com/ARS_coding" }} target={"_blank"}><Twitter className="footer-item custom-icon" /></Link>
                             <Link to={{ pathname: "https://www.linkedin.com/in/ali-r%C4%B1za-%C5%9Fahin-3a5721202/" }} target={"_blank"}><Linkedin className="footer-item custom-icon" /></Link>
                             <Link to={{ pathname: "https://github.com/ARS-coding" }} target={"_blank"}><Github className="footer-item custom-icon" /></Link>

@@ -64,7 +64,6 @@
 }
 
 .card:hover > h3 {
-  text-decoration: underline;
   transition: ease 250ms;
 }
 

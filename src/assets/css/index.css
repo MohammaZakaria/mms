@@ -153,6 +153,10 @@ a:hover {
   background-color: #ff5a00;
 }
 
+.footer-row > * {
+  margin: 30px 10px;
+}
+
 .custom-footer .custom-icon {
   font-size: 1.4rem !important;
 }
