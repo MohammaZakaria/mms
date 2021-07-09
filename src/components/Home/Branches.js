@@ -36,7 +36,7 @@ const Branches = () => {
                                 return (
                                     <Col key={branch.id} lg={4} md={6} className="branch-item">
                                         <div className="card-body-image">
-                                            <img className="avatar" src={branch.branchAvatar} alt="" />
+                                            <img loading="lazy" className="avatar" src={branch.branchAvatar} alt="" />
                                             <div className="over-lay-bg-color"></div>
                                             <Link to={`branch/${branch.id}`} className="overlay custom-overlay-bg">
                                                 <span>{branch.branchName}</span>

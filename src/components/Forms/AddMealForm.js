@@ -4,9 +4,7 @@ import CustomErrorMessage from './CustomErrorMessage'
 import './../../assets/css/forms.css'
 import isImageURL from 'valid-image-url';
 
-function AddMealForm({ formType, postData, initialValuesOnEdit }) {
-    // console.log('formType :', formType);
-
+function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
     const [ingredient, setIngredient] = useState('')
     const [step, setStep] = useState('');
 
@@ -19,6 +17,7 @@ function AddMealForm({ formType, postData, initialValuesOnEdit }) {
         priority: "",
         status: "to-cook",
     }
+
     return (
         <div className="custom-form"> {/* custom class */}
             <h3 className="form-title"> {formType !== "edit" ? 'Add a new' : 'Update'} <span className="bg-dark light-colored">{formType !== "edit" ? 'Meal!' : `${initial.title}`}</span></h3>
@@ -52,7 +51,11 @@ function AddMealForm({ formType, postData, initialValuesOnEdit }) {
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {
-                        postData(values);
+                        if (formType === 'add') {
+                            postData(values);
+                        } else if (formType === 'edit') {
+                            editData(values);
+                        }
                         setSubmitting(false);
                     }, 400);
                 }}
@@ -117,6 +120,7 @@ function AddMealForm({ formType, postData, initialValuesOnEdit }) {
                                         if (step !== '') {
                                             // setFormInputs({ ...formInputs, ingredients: [...formInputs.ingredients, ingredient] })
                                             values.steps.push(step)
+
                                             // console.log(formInputs)
                                             setStep('')
                                         }
@@ -131,14 +135,23 @@ function AddMealForm({ formType, postData, initialValuesOnEdit }) {
                             <ol>
                                 {
                                     values.ingredients.map((ing, i) => {
-                                        return <li key={i}>{ing}</li>
+                                        return <li key={i}
+                                            className="flex align-center justify-between list-in-form">
+                                            <span>{ing}</span>
+                                            <strong onClick={e => console.log(ing)}>X</strong></li>
                                     })
                                 }
                             </ol>
                             <ol>
                                 {
                                     values.steps.map((s, i) => {
-                                        return <li key={i}>{s}</li>
+                                        return <li key={i} className="flex align-center justify-between list-in-form">
+                                            <span>{s}</span>
+                                            <strong onClick={e => console.log(s)
+                                                // const filteredAry = values.steps.filter(e => e !== s)
+                                                // values.steps.push(filteredAry)
+                                            }>X</strong></li>
+
                                     })
                                 }
                             </ol>

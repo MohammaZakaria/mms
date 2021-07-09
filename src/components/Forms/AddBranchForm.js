@@ -4,7 +4,8 @@ import CustomErrorMessage from './CustomErrorMessage'
 import './../../assets/css/forms.css'
 import isImageURL from 'valid-image-url';
 
-const AddBranchForm = ({ postData, formType, initialValuesOnEdit }) => {
+const AddBranchForm = ({ editData, postData, formType, initialValuesOnEdit }) => {
+    console.log('formType :', formType);
     const initial = initialValuesOnEdit ? initialValuesOnEdit : { branchName: '', branchLocation: '', branchAvatar: '' }
     return (
         <div className="custom-form">
@@ -29,7 +30,11 @@ const AddBranchForm = ({ postData, formType, initialValuesOnEdit }) => {
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {
-                        postData(values);
+                        if (formType === 'add') {
+                            postData(values);
+                        } else if (formType === 'edit') {
+                            editData(values);
+                        }
                         setSubmitting(false);
                     }, 400);
                 }}

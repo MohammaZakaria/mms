@@ -34,8 +34,16 @@ const Board = (props) => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    })
+    }, [])
 
+
+
+    const handleEditSubmit = async (values) => {
+        console.log('values :', values);
+        await db.collection('branches').doc(docId).collection('meals').doc(values.id).set(values)
+        setModalShow(false)
+        alert.success(`Congrats you have edited ${values.title} successfully!`)
+    }
 
     const fetchItems = async () => {
         db.collection("branches").doc(docId).collection('meals')
@@ -48,14 +56,11 @@ const Board = (props) => {
     }
 
     const fetchBoardsName = async () => {
-        const branch = await db.collection("branches").doc(docId).get()
-        const { branchName } = branch.data()
-        setBranchNameState(branchName)
-        // setMeals(mealsArray)
+        const branch = await db.collection("branches").doc(docId).onSnapshot((snapshot) => setBranchNameState(snapshot.data().branchName))
     }
     const columnsFromBackend = {
         'to-cook': {
-            name: "To Coock",
+            name: "To Cook",
             items: meals.filter(meal => meal.status === 'to-cook')
         },
         'cooking': {
@@ -63,7 +68,7 @@ const Board = (props) => {
             items: meals.filter(meal => meal.status === 'cooking')
         },
         'cooked': {
-            name: "Served",
+            name: "Cooked",
             items: meals.filter(meal => meal.status === 'cooked')
         }
     };
@@ -123,7 +128,7 @@ const Board = (props) => {
 
     const editItem = async (id) => {
         const res = await db.collection('branches').doc(docId).collection('meals').doc(id).get()
-        setItem(res.data())
+        setItem({ id: res.id, ...res.data() })
         setModalShow(true)
     }
 
@@ -220,19 +225,22 @@ const Board = (props) => {
                                                                                                     <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                                                                                 </svg>
                                                                                             </button>
-                                                                                            <img src={item.mealUrl} alt={item.title} />
+                                                                                            <small className={`batch ${item.status === 'to-cook' ? 'high-pri' : item.status === 'cooking' ? 'low-pri' : 'md-pri'}`}> {item.status}</small>
+                                                                                            <img loading="lazy" className="pointer" onClick={e => editItem(item.id)} src={item.mealUrl} alt={item.title} />
                                                                                         </div>
                                                                                         <div className='item-body'>
                                                                                             <h2 onClick={e => editItem(item.id)} className="item-title">
                                                                                                 {item.title}
                                                                                             </h2>
+                                                                                            <p className="meta-data"> {item.steps.length} {item.steps.length > 1 ? 'STEPS' : 'STEP'}</p>
+                                                                                            <p className="meta-data">{item.ingredients.length} {item.ingredients.length > 1 ? 'INGREDIENTS' : 'INGREDIENT'}</p>
                                                                                         </div>
                                                                                         <div className="divider"></div>
                                                                                         <div className='flex align-center justify-between item-footer'>
-                                                                                            <small className="chef-name">
+                                                                                            <small onClick={e => editItem(item.id)} className="pointer chef-name">
                                                                                                 {item.chef}
                                                                                             </small>
-                                                                                            <small className={`item-priority ${item.priority === 'High' ? 'high-pri' : item.priority === 'Medium' ? 'md-pri' : 'low-pri'} `}>
+                                                                                            <small onClick={e => editItem(item.id)} className={`item-priority pointer ${item.priority === 'High' ? 'high-pri' : item.priority === 'Medium' ? 'md-pri' : 'low-pri'}`} >
                                                                                                 {item.priority}
                                                                                             </small>
                                                                                             {/* <small className={`item-priority md-pri`}>
@@ -285,7 +293,7 @@ const Board = (props) => {
                 onHide={() => setModalShow(false)}
                 title="Add a new Branch"
             >
-                <AddMealForm formType="edit" initialValuesOnEdit={item} />
+                <AddMealForm editData={handleEditSubmit} formType="edit" initialValuesOnEdit={item} />
             </VerticallyCenteredModal>
             {sweetAlert &&
                 <SweetAlert

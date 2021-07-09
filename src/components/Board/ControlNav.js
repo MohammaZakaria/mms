@@ -28,6 +28,22 @@ const ControlNav = ({ boardId, branchName }) => {
     }
 
 
+    const handleEditSubmit = async (values) => {
+        await db.collection('branches').doc(boardId).collection('meals').doc(values.id).set(values)
+        setModalShow(false)
+        alert.success(`Congrats you have edited ${values.title} successfully!`)
+        setModalWrap({ operation: '', formType: '' })
+    }
+
+
+    const handleEditBranchSubmit = async (values) => {
+        await db.collection('branches').doc(boardId).set(values)
+        setModalShow(false)
+        alert.success(`Congrats you have edited ${values.branchName} successfully!`)
+        setModalWrap({ operation: '', formType: '' })
+    }
+
+
     const handleDeleteButtonClick = async (id) => {
         setSweetAlert(!sweetAlert)
     }
@@ -89,10 +105,10 @@ const ControlNav = ({ boardId, branchName }) => {
                 {
                     modalWrap.formType === 'meal' ?
                         <AddMealForm formType={modalWrap.operation === 'edit' ?
-                            modalWrap.operation : 'add'} postData={handleSubmit} />
+                            modalWrap.operation : 'add'} editData={handleEditSubmit} postData={handleSubmit} />
                         : modalWrap.formType === 'branch' ?
                             <AddBranchForm initialValuesOnEdit={branch} formType={modalWrap.operation === 'edit' ?
-                                modalWrap.operation : 'add'} postData={handleSubmit} /> : null
+                                modalWrap.operation : 'add'} editData={handleEditBranchSubmit} postData={handleSubmit} /> : null
                 }
             </VerticallyCenteredModal>
             {sweetAlert &&
