@@ -7,6 +7,7 @@ import { Eye, Bullseye, Gem } from 'react-bootstrap-icons';
 import Services from './../global/Services'
 import Cards from '../global/Cards';
 import './../../assets/css/about_us.css';
+import { Helmet } from "react-helmet";
 
 const cards = [
     {
@@ -37,6 +38,10 @@ const About = () => {
     return (
         <>
             <section className="min-h-89 img-layer">
+                <Helmet>
+                    <meta name="description" content="MMS. This is best placed for managing you restaurant's branches" />
+                    <title>MMS | About us</title>
+                </Helmet>
                 <div className="filter-layer min-h-89">
                     <div className="content">
                         <h2>Increase your kitchen's <b>efficiency.</b></h2>

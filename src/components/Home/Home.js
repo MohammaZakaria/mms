@@ -5,6 +5,7 @@ import Services from '../global/Services'
 import CallToAction from './CallToAction'
 import Branches from './Branches'
 import servicesImg from './../../assets/images/services.svg';
+import { Helmet } from "react-helmet";
 
 const Home = () => {
     useEffect(() => {
@@ -13,6 +14,10 @@ const Home = () => {
 
     return (
         <main className="min-h-100">
+            <Helmet>
+                <meta name="description" content="MMS. This is best placed for managing you restaurant's branches" />
+                <title>MMS | Home</title>
+            </Helmet>
             <Hero />
             <Services
                 servicesImg={servicesImg}

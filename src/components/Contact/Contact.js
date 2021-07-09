@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 import { TelephoneForward, Envelope, ChatDots } from 'react-bootstrap-icons';
 import Cards from '../global/Cards';
 import '../../assets/css/about_us.css';
+import { Helmet } from "react-helmet";
 
 const cards = [
     {
@@ -33,6 +34,10 @@ const Contact = () => {
     return (
         <>
             <Container className="min-h-100" style={{ paddingTop: "110px" }}>
+                <Helmet>
+                    <meta name="description" content="MMS. This is best placed for managing you restaurant's branches" />
+                    <title>MMS | Contact us</title>
+                </Helmet>
                 <Cards cardsArray={cards} />
             </Container>
         </>

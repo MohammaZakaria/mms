@@ -11,6 +11,7 @@ import AddMealForm from './../Forms/AddMealForm'
 import VerticallyCenteredModal from './../global/VerticallyCenteredModal'
 import SweetAlert from "react-bootstrap-sweetalert";
 import { useAlert } from 'react-alert'
+import { Helmet } from "react-helmet";
 
 
 const Board = (props) => {
@@ -143,6 +144,10 @@ const Board = (props) => {
 
     return (
         <main className="board">
+            <Helmet>
+                <meta name="description" content="MMS. This is best placed for managing you restaurant's branches" />
+                <title>MMS | {branchNameState}'s Board</title>
+            </Helmet>
             <Container className="mt-100px min-h-100">
                 <ControlNav branchName={branchNameState} boardId={docId} />
                 <Row>
