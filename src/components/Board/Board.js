@@ -39,7 +39,6 @@ const Board = (props) => {
 
 
     const handleEditSubmit = async (values) => {
-        console.log('values :', values);
         await db.collection('branches').doc(docId).collection('meals').doc(values.id).set(values)
         setModalShow(false)
         alert.success(`Congrats you have edited ${values.title} successfully!`)
@@ -56,7 +55,7 @@ const Board = (props) => {
     }
 
     const fetchBoardsName = async () => {
-        const branch = await db.collection("branches").doc(docId).onSnapshot((snapshot) => setBranchNameState(snapshot.data().branchName))
+        const branch = await db.collection("branches").doc(docId).onSnapshot((snapshot) => setBranchNameState(snapshot.data()?.branchName))
     }
     const columnsFromBackend = {
         'to-cook': {

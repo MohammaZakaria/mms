@@ -1,17 +1,16 @@
 import React from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import Card from './Card';
 // import './../../assets/css/about_us.css';
 // import "../../assets/"
 
 function Cards({ cardsArray }) {
-    console.log(cardsArray);
     return (
         <Container>
             <Row className="vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row">
-                {cardsArray.map(cardObj => {
+                {cardsArray.map((cardObj, index) => {
                     return (
-                        <Card card={cardObj} />
+                        <Card key={index} card={cardObj} />
                     )
                 })}
             </Row>

@@ -7,8 +7,8 @@ const Card = ({ card }) => {
             {card.image}
             < h3 > {card.header}</h3 >
             <div className="text-center">
-                {card.textLines.map(line => (
-                    <p>{line}</p>
+                {card.textLines.map((line, index) => (
+                    <p key={index}>{line}</p>
                 ))}
             </div>
         </Col>

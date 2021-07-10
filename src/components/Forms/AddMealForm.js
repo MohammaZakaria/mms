@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import CustomErrorMessage from './CustomErrorMessage'
 import './../../assets/css/forms.css'
 import isImageURL from 'valid-image-url';
 
+
 function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
+    const formRef = useRef();
     const [ingredient, setIngredient] = useState('')
+    const [ingredients, setIngredients] = useState([])
     const [step, setStep] = useState('');
+    const [steps, setSteps] = useState([]);
 
     const initial = initialValuesOnEdit ? initialValuesOnEdit : {
         title: "",
@@ -18,10 +22,29 @@ function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
         status: "to-cook",
     }
 
+    useEffect(() => {
+        setSteps(formRef.current.values?.steps);
+    }, [])
+
+    useEffect(() => {
+        formRef.current.values.steps = steps;
+    }, [steps])
+
+
+    useEffect(() => {
+        setIngredients(formRef.current.values?.ingredients);
+    }, [])
+
+    useEffect(() => {
+        formRef.current.values.ingredients = ingredients;
+    }, [ingredients])
+
+
     return (
         <div className="custom-form"> {/* custom class */}
             <h3 className="form-title"> {formType !== "edit" ? 'Add a new' : 'Update'} <span className="bg-dark light-colored">{formType !== "edit" ? 'Meal!' : `${initial.title}`}</span></h3>
             <Formik
+                innerRef={formRef}
                 initialValues={initial}
                 validate={async (values) => {
                     const errors = {};
@@ -102,7 +125,7 @@ function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
                                         e.preventDefault()
                                         if (ingredient !== '') {
                                             // setFormInputs({ ...formInputs, ingredients: [...formInputs.ingredients, ingredient] })
-                                            values.ingredients.push(ingredient)
+                                            setIngredients([...ingredients, ingredient])
                                             // console.log(formInputs)
                                             setIngredient('')
                                         }
@@ -119,7 +142,7 @@ function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
                                         e.preventDefault()
                                         if (step !== '') {
                                             // setFormInputs({ ...formInputs, ingredients: [...formInputs.ingredients, ingredient] })
-                                            values.steps.push(step)
+                                            setSteps([...steps, step])
 
                                             // console.log(formInputs)
                                             setStep('')
@@ -134,22 +157,26 @@ function AddMealForm({ formType, editData, postData, initialValuesOnEdit }) {
                         <div className="flex align-start justify-around">
                             <ol>
                                 {
-                                    values.ingredients.map((ing, i) => {
+                                    ingredients.map((ing, i) => {
                                         return <li key={i}
                                             className="flex align-center justify-between list-in-form">
                                             <span>{ing}</span>
-                                            <strong onClick={e => console.log(ing)}>X</strong></li>
+                                            <strong onClick={e => {
+                                                const filteredAry = ingredients.filter(e => e !== ing)
+                                                setIngredients(filteredAry)
+                                            }}>X</strong></li>
                                     })
                                 }
                             </ol>
                             <ol>
                                 {
-                                    values.steps.map((s, i) => {
+                                    steps.map((s, i) => {
                                         return <li key={i} className="flex align-center justify-between list-in-form">
                                             <span>{s}</span>
-                                            <strong onClick={e => console.log(s)
-                                                // const filteredAry = values.steps.filter(e => e !== s)
-                                                // values.steps.push(filteredAry)
+                                            <strong onClick={e => {
+                                                const filteredAry = steps.filter(e => e !== s)
+                                                setSteps(filteredAry)
+                                            }
                                             }>X</strong></li>
 
                                     })
