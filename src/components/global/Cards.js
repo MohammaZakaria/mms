@@ -6,7 +6,7 @@ import Card from './Card';
 
 function Cards({ cardsArray }) {
     return (
-        <Container fluid>
+        <Container>
             <Row className="vision-mission-values flex-wrap justify-content-around flex-column flex-sm-column flex-md-row">
                 {cardsArray.map((cardObj, index) => {
                     return (

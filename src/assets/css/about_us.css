@@ -37,21 +37,22 @@
   margin: 30px 0;
 }
 
-.vision-mission-values > .card {
+.card {
   display: flex;
-  flex-basis: 30%;
+  /* flex-basis: 30%; */
   flex-direction: column;
+  text-align: center;
   justify-content: center;
   align-items: center;
   transition: ease 250ms;
   padding: 20px;
   margin: 17px 0;
   color: var(--dark-color);
-
+  height: 100%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
-.vision-mission-values > .card:hover {
+.card:hover {
   background-color: var(--hover-color);
   color: #fef9ff;
   transition: ease 250ms;

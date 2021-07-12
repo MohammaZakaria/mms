@@ -7,6 +7,8 @@ import '../../assets/css/contact_us.css';
 import { Helmet } from "react-helmet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import db from './../../firebaseConfig';
+import CustomErrorMessage from '../Forms/CustomErrorMessage';
+import { useAlert } from 'react-alert'
 
 const cards = [
     {
@@ -24,43 +26,44 @@ const cards = [
     {
         image: <ChatDots />,
         header: "Live Chat",
-        textLines: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui velit, pharetra non suscipit.'],
+        textLines: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque.'],
         rowClasses: "vision-mission-values flex-wrap justify-content-around pt-5 flex-column flex-sm-column flex-md-row"
     }
 ]
 
-let initialFormValues = {name: "", email: "", message: ""};
+let initialFormValues = { name: "", email: "", message: "" };
 
 const Contact = () => {
+    const alert = useAlert();
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [])
     return (
         <>
-            <Container fluid className="min-h-100" style={{ paddingTop: "110px" }}>
+            <Container className="min-h-100" style={{ paddingTop: "110px" }}>
                 <Helmet>
                     <meta name="description" content="MMS. This is best placed for managing you restaurant's branches" />
                     <title>MMS | Contact us</title>
                 </Helmet>
                 <Cards cardsArray={cards} />
                 <Row className="contact-form align-items-center">
-                    <Col style={{paddingLeft: "35px"}}>
+                    <Col lg="6" sm="12">
                         <h1>Contact Us</h1>
-                        <p style={{width: "50%"}}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore perferendis praesentium quos reiciendis iusto itaque? Inventore, commodi?</p>
+                        <p style={{ width: "50%" }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore perferendis praesentium quos reiciendis iusto itaque? Inventore, commodi?</p>
                     </Col>
-                    <Col style={{paddingRight: "34px"}}>
-                        <p>Great vision without great people is irrelevant.<br/> Let's work <span>together.</span></p>
+                    <Col sm="12" lg="6">
+                        <p>Great vision without great people is irrelevant.<br /> Let's work <span>together.</span></p>
                         <Formik
                             initialValues={initialFormValues}
                             validate={(values) => {
                                 const errors = {};
-                                if(!values.name) {
+                                if (!values.name) {
                                     errors.name = "Please type in your name."
                                 }
-                                if(!values.email) {
+                                if (!values.email) {
                                     errors.email = "Please type in your email."
                                 }
-                                if(!values.message) {
+                                if (!values.message) {
                                     errors.message = "Please type in your message."
                                 }
                                 return errors;
@@ -69,15 +72,16 @@ const Contact = () => {
                                 setTimeout(() => {
                                     setSubmitting(false);
                                     db.collection("contacts").doc(values.name).set(values)
-                                    .then(() => {
-                                        setSubmitting(false);
-                                        console.log("Congratulations! You have successfully submitted you contact form!") 
-                                    })
-                                    .catch((error) => {
-                                        setSubmitting(false);
-                                        console.error("There's a problem happened on submit: ", error)
-                                    })
+                                        .then(() => {
+                                            setSubmitting(false);
+                                            console.log("Congratulations! You have successfully submitted you contact form!")
+                                        })
+                                        .catch((error) => {
+                                            setSubmitting(false);
+                                            console.error("There's a problem happened on submit: ", error)
+                                        })
                                     resetForm()
+                                    alert.success(`Your message sent successfully!`)
                                 }, 400);
                             }}
                         >
@@ -85,15 +89,20 @@ const Contact = () => {
                                 console.log(values)
                                 return (
                                     <Form>
-                                        <Field name="name" placeholder="Enter your Name" />
-                                        <ErrorMessage name="name" component="div" />
+                                        <div className="input-group-div">
+                                            <Field name="name" placeholder="Enter your Name" />
+                                            <ErrorMessage name="name" component={CustomErrorMessage} />
+                                        </div>
+                                        <div className="input-group-div">
 
-                                        <Field name="email" placeholder="Enter your Email" />
-                                        <ErrorMessage name="email" component="div" />
+                                            <Field name="email" placeholder="Enter your Email" />
+                                            <ErrorMessage name="email" component={CustomErrorMessage} />
+                                        </div>
+                                        <div className="input-group-div">
 
-                                        <Field name="message" component="textarea" placeholder="Enter your Message" />
-                                        <ErrorMessage name="message" component="div" />
-
+                                            <Field name="message" component="textarea" placeholder="Enter your Message" />
+                                            <ErrorMessage name="message" component={CustomErrorMessage} />
+                                        </div>
                                         <button type="submit" className="submit-btn" disabled={isSubmitting}>Submit</button>
                                     </Form>
                                 )
