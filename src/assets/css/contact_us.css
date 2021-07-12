@@ -1,0 +1,15 @@
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.contact-form > .col {
+    padding: 15px 0;
+}
+
+.submit-btn {
+    border: none;
+    background-color: wheat;
+    padding: .4rem 2.2rem;
+}
